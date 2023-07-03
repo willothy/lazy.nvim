@@ -160,6 +160,7 @@ M.defaults = {
   },
   packspec = {
     enabled = true,
+    versions = true, -- Honor dependency versions in packspecs
     path = vim.fn.stdpath("state") .. "/lazy/packspec.lua",
   },
   debug = false,
