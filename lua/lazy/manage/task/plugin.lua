@@ -5,16 +5,6 @@ local Config = require("lazy.core.config")
 ---@type table<string, LazyTaskDef>
 local M = {}
 
----@param plugin LazyPlugin
-local function get_build_file(plugin)
-  for _, path in ipairs({ "build.lua", "build/init.lua" }) do
-    path = plugin.dir .. "/" .. path
-    if Util.file_exists(path) then
-      return path
-    end
-  end
-end
-
 M.build = {
   ---@param opts? {force:boolean}
   skip = function(plugin, opts)
