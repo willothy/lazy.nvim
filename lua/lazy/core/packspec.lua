@@ -30,6 +30,10 @@ local function convert(plugin, spec)
         if (not Config.options.packspec.versions) or version == "*" or version == "" then
           version = nil
         end
+        -- HACK: Add `.git` to github urls
+        if url:find("github") and not url:match("%.git$") then
+          url = url .. ".git"
+        end
         ret[#ret + 1] = { url = url, version = version }
       end
     end
