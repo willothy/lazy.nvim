@@ -37,7 +37,7 @@ local function convert(plugin, spec)
         ret[#ret + 1] = { url = url, version = version }
       end
     end
-    local p = vim.tbl_get(pkg, "custom", "lazy")
+    local p = pkg.lazy
     if p then
       p.url = p.url or plugin.url
       p.dir = p.dir or plugin.dir
