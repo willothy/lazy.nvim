@@ -3,11 +3,12 @@ local Util = require("lazy.util")
 
 ---@class PackSpec
 ---@field dependencies? table<string, string>
----@field custom?: {lazy?:LazyPluginSpec}
+---@field lazy? LazyPluginSpec
 local M = {}
 
 M.lazy_file = "lazy.lua"
 M.pkg_file = "pkg.json"
+M.enable_lazy_file = false
 
 ---@alias LazyPkg {lazy?:(fun():LazySpec), pkg?:PackSpec}
 
@@ -74,7 +75,7 @@ function M.get(plugin)
     return
   end
   M.specs[plugin.dir] = M.specs[plugin.dir] or convert(plugin, M.packspecs[plugin.dir])
-  return M.specs[plugin.dir]
+  return vim.deepcopy(M.specs[plugin.dir])
 end
 
 function M.update()
@@ -82,7 +83,7 @@ function M.update()
   for _, plugin in pairs(Config.plugins) do
     local spec = {
       pkg = M.pkg(plugin),
-      lazy = M.lazy_pkg(plugin),
+      lazy = M.enable_lazy_file and M.lazy_pkg(plugin) or nil,
     }
     if not vim.tbl_isempty(spec) then
       ret[plugin.dir] = spec
@@ -91,6 +92,7 @@ function M.update()
   local code = "return " .. Util.dump(ret)
   Util.write_file(Config.options.packspec.path, code)
   M.packspecs = nil
+  M.specs = {}
 end
 
 ---@param plugin LazyPlugin
